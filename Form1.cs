@@ -53,9 +53,9 @@ namespace CalculadoraC
         private Button btnOct;
 
         private MenuStrip menu;
-        private ToolStripItem catTipo;
-        private ToolStripItem miEstandor;
-        private ToolStripItem miCientifica;
+        private ToolStripMenuItem catTipo;
+        private ToolStripMenuItem miEstandor;
+        private ToolStripMenuItem miCientifica;
           
 
         //private Button x;
@@ -63,10 +63,10 @@ namespace CalculadoraC
         private Label lblOp;
         private string operacion;
         private Double resul;
+        private int basenum;
         public Form1()
         {
-            this.Size = new Size(600, 500);
-            this.Text = "Calculator";
+            basenum = 10;
             operacion = "";
             resul = 0;
             display= new TextBox();
@@ -165,7 +165,7 @@ namespace CalculadoraC
 
 
 
-            display.Size = new Size(260,30);
+            display.Size = new Size(558,50);
             display.Multiline = true;
             lblOp.AutoSize = true;
 
@@ -190,7 +190,7 @@ namespace CalculadoraC
             btnIgual.Text="=";
             btndiv.Text="/";
 
-            btnPi.Text =" ";
+            btnPi.Text = "π";
             btnlog.Text ="Log";
             btnSqrt.Text ="Sqrt";
             btnCuad.Text ="x^2";
@@ -213,6 +213,7 @@ namespace CalculadoraC
             catTipo.Text="Tipo";
             miEstandor.Text="Estandar";
             miCientifica.Text="Cientifica";
+            display.Text = "0";
 
 
 
@@ -284,34 +285,244 @@ namespace CalculadoraC
                 count++;
             }
              count = 0;
-            x = 330;
+            x = 320;
             y = 85;
             foreach (Button button in cientific)
             {
                 if (count == 4)
                 {
-                    x = 330;
+                    x = 320;
                     y += 57;
                     count = 0;
                 }
                 button.Location = new Point(x, y);
-                button.Click += new EventHandler(clicked);
+                //button.Click += new EventHandler(clicked);
                 this.Controls.Add(button);
                 x += 67;
                 count++;
             }
-          //  catTipo.DropDown
-
-           // catTipo.DropDownItems().Add(miEstandor);
-           // catTipo.DropDownItems().Add(miCientifica);
+            miEstandor.Click += new EventHandler(menuEstandar_click);
+            miCientifica.Click += new EventHandler(menuCientifica_click);
+            catTipo.DropDownItems.Add(miEstandor);
+            catTipo.DropDownItems.Add(miCientifica);
             menu.Items.Add(catTipo);
+
+            btnPi.Click += new EventHandler(btnPi_Click);
+            btnlog.Click += new EventHandler(btnLog_Click);
+            btnLnx.Click += new EventHandler(btnLn_Click);
+            btnSin.Click += new EventHandler(btnSin_Click);
+            btnSinh.Click += new EventHandler(btnSinh_Click);
+            btnCos.Click += new EventHandler(btnCos_Click);
+            btnCosh.Click += new EventHandler(btnCosh_Click);
+            btnTan.Click += new EventHandler(btnTan_Click);
+            btnTanh.Click += new EventHandler(btnTanh_Click);
+            btnExp.Click += new EventHandler(btnExp_Clic);
+            btnMod.Click += new EventHandler(clicked);
+            btnXy.Click += new EventHandler(clicked);
+            btn1x.Click += new EventHandler(btn1x_Click);
+            btnCuad.Click += new EventHandler(btnCuad_Click);
+            btnSqrt.Click += new EventHandler(btnSqrt_Click);
+            btnBin.Click += new EventHandler(toBin);
+            btnOct.Click += new EventHandler(toOct);
+            btnDec.Click += new EventHandler(toDec);
+            btnHex.Click += new EventHandler(toHex);
+            //btnSqrt.Click += new EventHandler(btnSqrt_Click);
 
             this.Controls.Add(display);
             this.Controls.Add(lblOp);
             this.Controls.Add(menu);
             lblOp.BringToFront();
             InitializeComponent();
+            this.Size = new Size(600, 500);
+            this.Text = "Calculator";
         }
+
+       
+        private void toBin(Object sender, EventArgs e )
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            int num = int.Parse(display.Text);
+            lblOp.Text = $"Bin({display.Text})";
+            display.Text = Convert.ToString(num, 2);//.ToString();
+            //resul = (Double)(Convert.ToInt32(display.Text, 2));
+            basenum = 2;
+        }
+
+        private void toOct(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            int num = int.Parse(display.Text);
+            lblOp.Text = $"Oct({display.Text})";
+            display.Text = Convert.ToString(num, 8);//.ToString();
+            //resul = (Double)(Convert.ToInt32(display.Text, 8));
+            basenum = 8;
+        }
+        private void toDec(Object sender, EventArgs e)
+        {
+            //int num = int.Parse(display.Text);
+            if (basenum != 10)
+            {
+               display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Dec({display.Text})";
+            display.Text = Convert.ToInt32(display.Text, 10).ToString();//.ToString();
+        }
+        private double decimalVal(string number)
+        {
+            int intValue = Convert.ToInt32(number, basenum);
+            return (Double)intValue;
+        }
+        private void toHex(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            int num = int.Parse(display.Text);
+            lblOp.Text = $"Hex({display.Text})";
+            display.Text = Convert.ToString(num, 16);//.ToString();
+            //resul = (Double) (Convert.ToInt32(display.Text,16));
+            basenum = 16;
+        }
+
+        private void btnPi_Click(Object sender, EventArgs e)
+        {
+            display.Text = "3.141592";
+        }
+
+        private void btn1x_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"(1/{display.Text}";
+            display.Text = (1 / Double.Parse(display.Text)).ToString();
+        }
+
+        private void btnSqrt_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"sqrt({display.Text})";
+            display.Text = Math.Sqrt(Double.Parse(display.Text)).ToString();
+        }
+        private void btnCuad_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"({display.Text})^2";
+            display.Text = (Double.Parse(display.Text) * Double.Parse(display.Text) ).ToString();
+        }
+        private void btnLog_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Log({display.Text})";
+            display.Text = Math.Log10(Double.Parse(display.Text)).ToString();
+        }
+        private void btnLn_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Ln({display.Text})";
+            display.Text = Math.Log(Double.Parse(display.Text)).ToString();
+        }
+
+        private void btnExp_Clic(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Exp({display.Text})";
+            display.Text = Math.Exp(Double.Parse(display.Text)).ToString();
+        }
+
+
+        private void btnSin_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Sin({display.Text})";
+            display.Text = Math.Sin(Double.Parse(display.Text)).ToString();
+        }
+        private void btnSinh_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Sinh({display.Text})";
+            display.Text = Math.Sinh(Double.Parse(display.Text)).ToString();
+        }
+
+        private void btnCos_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Cos({display.Text})";
+            display.Text = Math.Cos(Double.Parse(display.Text)).ToString();
+        }
+        private void btnCosh_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Cosh({display.Text})";
+            display.Text = Math.Cosh(Double.Parse(display.Text)).ToString();
+        }
+        private void btnTan_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Tan({display.Text})";
+            display.Text = Math.Tan(Double.Parse(display.Text)).ToString();
+        }
+        private void btnTanh_Click(Object sender, EventArgs e)
+        {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
+            lblOp.Text = $"Tanh({display.Text})";
+            display.Text = Math.Tanh(Double.Parse(display.Text)).ToString();
+        }
+
+
+        private void menuEstandar_click(object sender, EventArgs e)
+        {
+            this.Size=new Size(300, 500);
+            display.Size = new Size(260, 50);
+        }
+
+        private void menuCientifica_click(object sender, EventArgs e)
+        {
+            this.Size=new Size(600, 500);
+            display.Size = new Size(558, 50);
+        }
+
         private void clicked(object sender, EventArgs e)
         {
             if(sender != null)
@@ -361,7 +572,12 @@ namespace CalculadoraC
                     case "-":
                     case "*": 
                     case "/":
+                    case "Mod":
                         boton_operador(button.Text);
+                        break ;
+                    case "x^y":
+                    //case "1/x":
+                        boton_operador2(button.Text);
 
                         break;
 
@@ -389,9 +605,26 @@ namespace CalculadoraC
 
         private void boton_operador(string operador)
         {
+            if (basenum != 10)
+            {
+                display.Text = decimalVal(display.Text).ToString();
+            }
             operacion = operador;
             resul = Double.Parse(display.Text);
             lblOp.Text = display.Text+" "+operacion;
+            display.Text = "0";
+        }
+        private void boton_operador2(string operador)
+        {
+            operacion = operador;
+            resul = Double.Parse(display.Text);
+            lblOp.Text = display.Text + " ";
+            switch (operador)
+            {
+                case "x^y":
+                    lblOp.Text += "^";
+                    break;
+            }
             display.Text = "0";
         }
         private void boton_igual()
@@ -411,6 +644,13 @@ namespace CalculadoraC
                 case "/":
                     display.Text = (resul /= Double.Parse(display.Text)).ToString();
                     break;
+                case "Mod":
+                    display.Text = (resul %= Double.Parse(display.Text)).ToString();
+                    break;
+                    case "x^y":
+                    display.Text = Math.Pow(resul,Double.Parse(display.Text)).ToString();
+                    break;
+                    
             }
         }
     }
